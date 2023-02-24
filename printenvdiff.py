@@ -16,10 +16,10 @@ def env_string_to_dict(env_string):
 
 def get_env_string(env_script=None):
     if env_script:
-        command = ". " + env_script + "; env"
+        command = ["bash", "-c", "source " + env_script + "; env"]
     else:
-        command = "env"
-    return subprocess.run(command, capture_output=True, shell=True).stdout.decode("utf8")
+        command = ["bash", "-c", "env"]
+    return subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).stdout.decode("utf8")
 
 
 def env_dict_diff(old, new, no_compound):

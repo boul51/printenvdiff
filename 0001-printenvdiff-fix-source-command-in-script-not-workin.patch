@@ -1,0 +1,31 @@
+From 686f57be0647ace169bd98634400da460290dcc1 Mon Sep 17 00:00:00 2001
+From: Nicolas Boulicault <nboulicault-ext@witekio.com>
+Date: Wed, 21 Dec 2022 11:36:29 +0100
+Subject: [PATCH] printenvdiff: fix source command in script not working
+
+Change-Id: I3548c41ac584076d8f1250a769ddb7813a09d10b
+---
+ printenvdiff/printenvdiff.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/printenvdiff/printenvdiff.py b/printenvdiff/printenvdiff.py
+index da16200..b21cab7 100755
+--- a/printenvdiff/printenvdiff.py
++++ b/printenvdiff/printenvdiff.py
+@@ -16,10 +16,10 @@ def env_string_to_dict(env_string):
+ 
+ def get_env_string(env_script=None):
+     if env_script:
+-        command = ". " + env_script + "; env"
++        command = ["bash", "-c", "source " + env_script + "; env"]
+     else:
+-        command = "env"
+-    return subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.decode("utf8")
++        command = ["bash", "-c", "env"]
++    return subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False).stdout.decode("utf8")
+ 
+ 
+ def env_dict_diff(old, new, no_compound):
+-- 
+2.39.1
+
